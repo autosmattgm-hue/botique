@@ -114,7 +114,7 @@
       'Request a Piece':'Demander une piece',
       'View Services':'Voir les services',
       'Featured Drops':'Drops en vedette',
-      'Open Instagram post':'Ouvrir le post Instagram',
+      'Open Image':'Ouvrir l image',
       'Source Similar':'Sourcer une piece similaire',
       'Sourcing Categories':'Categories de sourcing',
       'Authentication-first sourcing, international availability checks, and fast client communication for every category.':'Sourcing avec verification d authenticite, controle de disponibilite internationale et communication rapide pour chaque categorie.',
