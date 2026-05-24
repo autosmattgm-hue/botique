@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flagship Boutique — Luxury Fashion Without Borders</title>
+<meta name="description" content="Flagship Boutique specializes in luxury fashion sourcing and personal shopping for clients worldwide. Exclusive designer collections from around the globe.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/amelie.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#c9a84c;
+  --gold-light:#e8d5a3;
+  --gold-dark:#8a6b2a;
+  --cream:#faf8f4;
+  --warm-white:#f5f0e8;
+  --nude:#e8ddd0;
+  --charcoal:#1a1a1a;
+  --soft-black:#111;
+  --muted:#8a8078;
+  --border:rgba(201,168,76,0.2);
+  --glass:rgba(255,255,255,0.06);
+  --glass-strong:rgba(255,255,255,0.12);
+  --shadow:0 8px 40px rgba(0,0,0,0.18);
+  --shadow-gold:0 4px 24px rgba(201,168,76,0.2);
+  --transition:cubic-bezier(0.25,0.46,0.45,0.94);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Jost',sans-serif;
+  font-weight:300;
+  background:var(--soft-black);
+  color:var(--cream);
+  overflow-x:hidden;
+  cursor:none;
+}
+::selection{background:var(--gold);color:var(--soft-black)}
+
+/* ── CURSOR ── */
+#cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .15s}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,0.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:transform .08s,width .2s,height .2s,border-color .2s}
+body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:14px;height:14px}
+body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{width:50px;height:50px;border-color:var(--gold)}
+
+/* ── SCROLL PROGRESS ── */
+#scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light));z-index:9999;width:0%;transition:width .1s linear}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:var(--soft-black);z-index:99990;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+#loader-logo{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;letter-spacing:.3em;color:var(--cream);opacity:0;animation:fadeUp .8s .3s var(--transition) forwards}
+#loader-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:lineGrow 1.2s .8s ease forwards}
+#loader-sub{font-size:.7rem;letter-spacing:.4em;color:var(--muted);text-transform:uppercase;opacity:0;animation:fadeUp .6s 1.2s var(--transition) forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes lineGrow{from{width:0}to{width:200px}}
+#loader.hide{animation:loaderOut .8s ease forwards}
+@keyframes loaderOut{to{opacity:0;pointer-events:none}}
+
+/* ── NAVBAR ── */
+nav{position:fixed;top:0;width:100%;z-index:1000;padding:1.5rem 4vw;display:flex;align-items:center;justify-content:space-between;transition:background .4s,padding .4s,backdrop-filter .4s}
+nav.scrolled{background:rgba(10,10,10,0.92);backdrop-filter:blur(20px);padding:1rem 4vw;border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;letter-spacing:.25em;color:var(--cream);text-decoration:none;text-transform:uppercase}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+.nav-links a:hover{color:var(--gold)}
+.nav-links a:hover::after{width:100%}
+.nav-actions{display:flex;align-items:center;gap:.8rem}
+.nav-cta{background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;padding:.6rem 1.6rem;cursor:pointer;transition:all .3s;text-decoration:none}
+.nav-cta:hover{background:var(--gold);color:var(--soft-black)}
+.lang-toggle,.theme-button{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--cream);font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;padding:.6rem .85rem;cursor:pointer;transition:all .3s;min-width:72px}
+.lang-toggle:hover,.theme-button:hover{border-color:var(--gold);color:var(--gold)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1001}
+.hamburger span{width:24px;height:1px;background:var(--cream);transition:all .3s;display:block}
+.mobile-menu{display:none;position:fixed;inset:0;background:var(--soft-black);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;transition:opacity .3s}
+.mobile-menu.open{display:flex;opacity:1}
+.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--cream);text-decoration:none;letter-spacing:.15em;transition:color .3s}
+.mobile-menu a:hover{color:var(--gold)}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:8rem 4vw 4rem}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(201,168,76,0.07) 0%,transparent 70%)}
+.hero-particles{position:absolute;inset:0;pointer-events:none}
+.particle{position:absolute;width:1px;height:1px;background:rgba(201,168,76,0.4);border-radius:50%;animation:float-particle linear infinite}
+@keyframes float-particle{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) scale(1.5);opacity:0}}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;max-width:1400px;margin:0 auto;width:100%;position:relative;z-index:2}
+.hero-content{display:flex;flex-direction:column;gap:2rem}
+.hero-tag{font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.8rem;opacity:0;animation:fadeUp .8s 2s var(--transition) forwards}
+.hero-tag::before{content:'';width:40px;height:1px;background:var(--gold)}
+h1.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5vw,5.5rem);font-weight:300;line-height:1.1;letter-spacing:.02em;opacity:0;animation:fadeUp .9s 2.2s var(--transition) forwards}
+h1.hero-title em{font-style:italic;color:var(--gold-light)}
+.hero-sub{font-size:clamp(.85rem,1.5vw,1rem);font-weight:300;color:var(--muted);line-height:1.8;max-width:460px;opacity:0;animation:fadeUp .8s 2.4s var(--transition) forwards}
+.hero-btns{display:flex;gap:1.2rem;flex-wrap:wrap;opacity:0;animation:fadeUp .8s 2.6s var(--transition) forwards}
+.btn-primary{padding:.9rem 2.4rem;background:var(--gold);color:var(--soft-black);font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:all .35s;position:relative;overflow:hidden}
+.btn-primary::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.15);transform:translateX(-100%);transition:transform .35s}
+.btn-primary:hover::before{transform:translateX(0)}
+.btn-ghost{padding:.9rem 2.4rem;border:1px solid rgba(201,168,76,0.4);color:var(--cream);font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:all .35s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.hero-visual{position:relative;height:600px;display:flex;align-items:center;justify-content:center;opacity:0;animation:fadeIn 1.2s 2.4s var(--transition) forwards}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.floating-card{position:absolute;border-radius:2px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);transition:transform .3s}
+.media-link{display:block;color:inherit;text-decoration:none}
+.floating-card .media-link{width:100%;height:100%}
+.floating-card img{width:100%;height:100%;object-fit:cover;display:block}
+.card-1{width:220px;height:290px;top:0;left:50%;transform:translateX(-60%);animation:float1 6s ease-in-out infinite}
+.card-2{width:160px;height:200px;bottom:20px;left:10%;animation:float2 7s ease-in-out infinite}
+.card-3{width:180px;height:240px;top:40px;right:0;animation:float3 8s ease-in-out infinite}
+.card-4{width:140px;height:180px;bottom:60px;right:10%;animation:float1 5.5s 1s ease-in-out infinite}
+.card-glow{position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(201,168,76,0.15),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;animation:pulse 4s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translateX(-60%) translateY(0) rotate(-2deg)}50%{transform:translateX(-60%) translateY(-18px) rotate(0deg)}}
+@keyframes float2{0%,100%{transform:translateY(0) rotate(3deg)}50%{transform:translateY(-14px) rotate(1deg)}}
+@keyframes float3{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-20px) rotate(1deg)}}
+@keyframes pulse{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}}
+
+/* ── GOLD DIVIDER ── */
+.gold-divider{display:flex;align-items:center;justify-content:center;gap:1rem;padding:3rem 4vw}
+.gold-divider::before,.gold-divider::after{content:'';flex:1;max-width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.gold-divider::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.gold-divider-icon{color:var(--gold);font-size:1rem;letter-spacing:.3em;font-size:.6rem}
+
+/* ── SCROLL GALLERY ── */
+.scroll-section{padding:0 0 5rem;overflow:hidden}
+.scroll-track-wrap{overflow:hidden;margin-bottom:1.5rem;padding:8px 0}
+.scroll-track{display:flex;gap:16px;width:max-content;animation:scrollLeft 35s linear infinite}
+.scroll-track.reverse{animation:scrollRight 38s linear infinite}
+.scroll-track:hover{animation-play-state:paused}
+@keyframes scrollLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes scrollRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.scroll-link{display:block;flex-shrink:0;color:inherit;text-decoration:none}
+.scroll-img{width:280px;height:370px;object-fit:cover;border-radius:2px;display:block;flex-shrink:0;transition:transform .4s,box-shadow .4s;cursor:pointer}
+.scroll-img:hover{transform:scale(1.03);box-shadow:0 20px 50px rgba(0,0,0,0.5),0 0 0 1px var(--border)}
+.scroll-img-sm{width:200px;height:260px}
+.scroll-img-wide{width:340px;height:240px}
+
+/* ── SECTION HEADERS ── */
+.section-header{text-align:center;margin-bottom:4rem;padding:0 4vw}
+.section-tag{font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:300;line-height:1.2}
+.section-title em{font-style:italic;color:var(--gold-light)}
+.section-sub{color:var(--muted);font-size:.9rem;margin-top:1rem;line-height:1.8;max-width:500px;margin-left:auto;margin-right:auto}
+
+/* ── COLLECTIONS ── */
+#collections{padding:6rem 4vw}
+.collections-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1400px;margin:0 auto}
+.collection-item{position:relative;overflow:hidden;aspect-ratio:3/4;cursor:pointer;background:#111;color:inherit;text-decoration:none;display:block}
+.collection-item img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--transition),opacity .4s}
+.collection-item:hover img{transform:scale(1.08);opacity:.75}
+.collection-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:2rem 1.5rem;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 50%);opacity:0;transition:opacity .4s}
+.collection-item:hover .collection-overlay{opacity:1}
+.collection-label{font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.collection-name{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--cream)}
+.collection-item.large{grid-row:span 2;aspect-ratio:auto}
+.collection-arrow{margin-top:.8rem;width:30px;height:1px;background:var(--gold);position:relative;transition:width .3s}
+.collection-arrow::after{content:'';position:absolute;right:0;top:-3px;width:7px;height:7px;border-top:1px solid var(--gold);border-right:1px solid var(--gold);transform:rotate(45deg)}
+.collection-item:hover .collection-arrow{width:50px}
+
+/* ── CAMPAIGN ── */
+#campaign{padding:7rem 4vw;background:linear-gradient(180deg,rgba(201,168,76,0.04),rgba(201,168,76,0.015));border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.campaign-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,430px);gap:5rem;align-items:center;max-width:1200px;margin:0 auto}
+.campaign-copy .section-tag,.campaign-copy .section-title{text-align:left}
+.campaign-copy .section-sub{margin-left:0;margin-right:0;text-align:left}
+.campaign-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem}
+.campaign-embed{position:relative;aspect-ratio:4/5;background:#080808;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
+.campaign-embed iframe{width:100%;height:100%;border:0;display:block;background:#fff}
+
+/* ── ABOUT ── */
+#about{padding:8rem 4vw;background:var(--warm-white);position:relative;overflow:hidden}
+#about .about-bg{position:absolute;top:-50%;right:-20%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.06),transparent 70%);pointer-events:none}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.about-images{position:relative;height:560px}
+.about-img-main{position:absolute;width:340px;height:450px;object-fit:cover;top:0;left:0;border-radius:1px;box-shadow:var(--shadow)}
+.about-img-accent{position:absolute;width:220px;height:280px;object-fit:cover;bottom:0;right:0;border-radius:1px;box-shadow:var(--shadow);border:4px solid var(--warm-white)}
+.about-img-float{position:absolute;top:30%;left:55%;transform:translate(-50%,-50%);background:rgba(10,8,5,0.85);backdrop-filter:blur(10px);border:1px solid var(--border);padding:1.5rem 2rem;text-align:center;animation:float2 6s ease-in-out infinite}
+.about-float-num{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--gold);line-height:1}
+.about-float-label{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:.3rem}
+.about-text-block{color:var(--charcoal)}
+.about-text-block .section-tag{color:var(--gold-dark);text-align:left}
+.about-text-block .section-title{text-align:left;color:var(--charcoal)}
+.about-text-block .section-title em{color:var(--gold-dark)}
+.about-description{font-size:1rem;line-height:1.9;color:rgba(26,26,26,0.75);margin-top:1.5rem}
+.about-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:1.5rem;line-height:1.6}
+.about-stats{display:flex;gap:3rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(201,168,76,0.2)}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--charcoal)}
+.stat-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(26,26,26,0.5);margin-top:.2rem}
+
+/* ── INSTAGRAM ── */
+#instagram{padding:6rem 4vw;background:var(--soft-black)}
+.insta-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:1200px;margin:2rem auto}
+.insta-item{position:relative;aspect-ratio:1;overflow:hidden;background:#1a1a1a;cursor:pointer;color:inherit;text-decoration:none;display:block}
+.insta-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s,opacity .4s}
+.insta-item:hover img{transform:scale(1.08);opacity:.6}
+.insta-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s;background:rgba(0,0,0,0.2)}
+.insta-item:hover .insta-overlay{opacity:1}
+.insta-icon{font-size:1.5rem;color:var(--cream)}
+.insta-cta{text-align:center;margin-top:3rem}
+.insta-cta a{display:inline-flex;align-items:center;gap:.8rem;border:1px solid var(--border);color:var(--cream);text-decoration:none;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;padding:1rem 2.5rem;transition:all .35s}
+.insta-cta a:hover{border-color:var(--gold);color:var(--gold)}
+.insta-cta a svg{width:16px;height:16px;fill:currentColor}
+
+/* ── CONTACT ── */
+#contact{padding:8rem 4vw;background:var(--warm-white)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;max-width:1200px;margin:0 auto;align-items:start}
+.contact-info{color:var(--charcoal)}
+.contact-info .section-tag{color:var(--gold-dark);text-align:left}
+.contact-info .section-title{text-align:left;color:var(--charcoal)}
+.contact-info .section-title em{color:var(--gold-dark)}
+.contact-description{color:rgba(26,26,26,0.7);margin-top:1.5rem;line-height:1.9;font-size:.95rem}
+.contact-channels{display:flex;flex-direction:column;gap:1.2rem;margin-top:2.5rem}
+.channel-btn{display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.5rem;border:1px solid;text-decoration:none;transition:all .35s;position:relative;overflow:hidden}
+.channel-btn::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;transition:width .35s}
+.channel-btn:hover::before{width:100%}
+.channel-btn span,.channel-btn strong{position:relative;z-index:1}
+.channel-wa{border-color:rgba(37,211,102,0.3);color:var(--charcoal)}
+.channel-wa::before{background:rgba(37,211,102,0.08)}
+.channel-wa:hover{color:var(--charcoal);border-color:rgba(37,211,102,0.6)}
+.channel-tg{border-color:rgba(0,136,204,0.3);color:var(--charcoal)}
+.channel-tg::before{background:rgba(0,136,204,0.08)}
+.channel-tg:hover{color:var(--charcoal);border-color:rgba(0,136,204,0.6)}
+.channel-ig{border-color:rgba(201,168,76,0.3);color:var(--charcoal)}
+.channel-ig::before{background:rgba(201,168,76,0.08)}
+.channel-ig:hover{color:var(--charcoal);border-color:rgba(201,168,76,0.6)}
+.channel-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.channel-icon svg{width:20px;height:20px}
+.channel-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block}
+.channel-value{font-size:.9rem;font-weight:400;color:var(--charcoal)}
+.contact-form-card{background:rgba(10,8,5,0.88);backdrop-filter:blur(20px);border:1px solid var(--border);padding:3rem 2.5rem}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--cream);margin-bottom:.5rem}
+.form-sub{font-size:.8rem;color:var(--muted);margin-bottom:2rem;letter-spacing:.05em}
+.form-group{margin-bottom:1.5rem}
+.form-group label{display:block;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(201,168,76,0.15);color:var(--cream);font-family:'Jost',sans-serif;font-size:.9rem;font-weight:300;padding:.9rem 1.1rem;outline:none;transition:border-color .3s;border-radius:0;-webkit-appearance:none}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(255,255,255,0.2)}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--gold)}
+.form-group textarea{height:120px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.btn-submit{width:100%;padding:1rem;background:var(--gold);color:var(--soft-black);font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;border:none;cursor:pointer;transition:all .35s;position:relative;overflow:hidden;margin-top:.5rem}
+.btn-submit:hover{background:var(--gold-light)}
+.form-success{display:none;text-align:center;padding:2rem;color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem}
+
+/* ── FOOTER ── */
+footer{background:var(--soft-black);border-top:1px solid var(--border);padding:5rem 4vw 2rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4rem;max-width:1400px;margin:0 auto;padding-bottom:4rem;border-bottom:1px solid var(--border)}
+.footer-brand .footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;letter-spacing:.25em;color:var(--cream)}
+.footer-tagline{color:var(--muted);font-size:.85rem;margin:.8rem 0 1.5rem;line-height:1.7}
+.footer-socials{display:flex;gap:.8rem}
+.social-btn{width:38px;height:38px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all .3s}
+.social-btn:hover{border-color:var(--gold);color:var(--gold)}
+.social-btn svg{width:16px;height:16px;fill:currentColor}
+.footer-col h5{font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.8rem}
+.footer-col ul a{color:var(--muted);text-decoration:none;font-size:.85rem;transition:color .3s}
+.footer-col ul a:hover{color:var(--cream)}
+.footer-newsletter{margin-top:1.5rem}
+.newsletter-input-wrap{display:flex;border:1px solid var(--border);overflow:hidden;margin-top:.8rem}
+.newsletter-input-wrap input{flex:1;background:transparent;border:none;color:var(--cream);font-family:'Jost',sans-serif;font-size:.8rem;padding:.8rem 1rem;outline:none}
+.newsletter-input-wrap input::placeholder{color:var(--muted)}
+.newsletter-submit{background:var(--gold);border:none;padding:.8rem 1rem;cursor:pointer;color:var(--soft-black);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;font-family:'Jost',sans-serif;transition:background .3s;white-space:nowrap}
+.newsletter-submit:hover{background:var(--gold-light)}
+.footer-bottom{max-width:1400px;margin:2rem auto 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:.75rem;color:var(--muted)}
+.footer-credit{font-size:.7rem;color:rgba(138,128,120,0.5)}
+
+/* ── FLOATING WA ── */
+#float-wa{position:fixed;bottom:2rem;right:2rem;z-index:990;width:54px;height:54px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform .3s,box-shadow .3s;animation:waBounce 3s ease infinite}
+#float-wa:hover{transform:scale(1.1);box-shadow:0 6px 30px rgba(37,211,102,0.6)}
+#float-wa svg{width:26px;height:26px;fill:#fff}
+@keyframes waBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s var(--transition),transform .8s var(--transition)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .8s var(--transition),transform .8s var(--transition)}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .8s var(--transition),transform .8s var(--transition)}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.delay-1{transition-delay:.1s}.delay-2{transition-delay:.2s}.delay-3{transition-delay:.3s}.delay-4{transition-delay:.4s}.delay-5{transition-delay:.5s}
+
+/* ── MARQUEE TEXT ── */
+.marquee-section{padding:2.5rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;background:rgba(201,168,76,0.03)}
+.marquee-track{display:flex;width:max-content;animation:marquee 25s linear infinite}
+.marquee-item{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:var(--muted);padding:0 2rem;white-space:nowrap;letter-spacing:.1em}
+.marquee-dot{color:var(--gold)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── THEME TOGGLE ── */
+#theme-toggle{position:fixed;top:50%;right:1.5rem;transform:translateY(-50%);z-index:990;display:flex;flex-direction:column;gap:.5rem;align-items:center}
+.theme-dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .3s}
+.theme-dot.active{background:var(--gold);transform:scale(1.5)}
+body.light-mode{--soft-black:#fff;--cream:#1a1a1a;--charcoal:#1a1a1a;--muted:#6b6258;--border:rgba(138,107,42,0.2);--glass:rgba(0,0,0,0.04);--warm-white:#fff;background:var(--soft-black)}
+body.light-mode nav.scrolled{background:rgba(255,255,255,0.92)}
+body.light-mode .contact-form-card{background:rgba(26,26,26,0.88)}
+body.light-mode #hero{background:var(--soft-black)}
+body.light-mode .hero-bg{background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(201,168,76,0.1) 0%,transparent 70%)}
+body.light-mode footer{background:#f7f7f7}
+body.light-mode #instagram{background:#f7f7f7}
+body.light-mode .mobile-menu{background:var(--soft-black)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .collections-grid{grid-template-columns:repeat(2,1fr)}
+  .collection-item.large{grid-row:auto}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .insta-grid{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr;text-align:center}
+  .hero-visual{height:350px;margin-top:2rem}
+  .hero-tag{justify-content:center}
+  .hero-sub{margin:0 auto}
+  .hero-btns{justify-content:center}
+  .card-1{width:160px;height:210px;left:50%;transform:translateX(-50%)}
+  .card-2{width:120px;height:155px;left:5%}
+  .card-3{width:130px;height:170px;right:2%;top:20px}
+  .card-4{width:100px;height:130px;right:8%;bottom:30px}
+  .about-grid{grid-template-columns:1fr;gap:3rem}
+  .about-images{height:400px}
+  .about-img-main{width:260px;height:340px}
+  .about-img-accent{width:170px;height:220px}
+  .contact-grid{grid-template-columns:1fr;gap:3rem}
+  .campaign-grid{grid-template-columns:1fr;gap:3rem}
+  .campaign-copy .section-tag,.campaign-copy .section-title,.campaign-copy .section-sub{text-align:center;margin-left:auto;margin-right:auto}
+  .campaign-actions{justify-content:center}
+  .campaign-embed{max-width:430px;margin:0 auto;width:100%}
+  .insta-grid{grid-template-columns:repeat(3,1fr)}
+  .footer-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .nav-links,.nav-actions{display:none}
+  .hamburger{display:flex}
+  #theme-toggle{display:none}
+  .collections-grid{grid-template-columns:1fr 1fr;gap:2px}
+  .about-stats{flex-wrap:wrap;gap:2rem}
+  .scroll-img{width:200px;height:260px}
+  .form-row{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+}
+@media(max-width:480px){
+  .hero-btns{flex-direction:column;align-items:center}
+  .btn-primary,.btn-ghost{width:100%;text-align:center}
+  .hero-visual{display:none}
+  .collections-grid{grid-template-columns:1fr}
+  .insta-grid{grid-template-columns:repeat(2,1fr)}
+  .campaign-actions{flex-direction:column}
+  #float-wa{bottom:1.5rem;right:1rem;width:46px;height:46px}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="scroll-progress"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div id="loader-logo">FLAGSHIP BOUTIQUE</div>
+  <div id="loader-line"></div>
+  <div id="loader-sub">Luxury Fashion Without Borders</div>
+</div>
+
+<!-- THEME TOGGLE -->
+<div id="theme-toggle">
+  <div class="theme-dot active" data-mode="dark" title="Dark mode"></div>
+  <div class="theme-dot" data-mode="light" title="Light mode"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">FLAGSHIP</a>
+  <ul class="nav-links">
+    <li><a href="flagship-boutique.html">Home</a></li>
+    <li><a href="collections.html">Collections</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="guide.html">Guide</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="lang-toggle" type="button" data-lang-toggle aria-label="Switch language">FR / EN</button>
+    <button class="theme-button" type="button" data-theme-toggle aria-label="Switch to white background">White</button>
+    <a href="#contact" class="nav-cta">Personal Shopper</a>
+  </div>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="flagship-boutique.html" class="menu-link">Home</a>
+  <a href="collections.html" class="menu-link">Collections</a>
+  <a href="services.html" class="menu-link">Services</a>
+  <a href="guide.html" class="menu-link">Guide</a>
+  <a href="#contact" class="menu-link">Contact</a>
+  <button class="lang-toggle" type="button" data-lang-toggle aria-label="Switch language">FR / EN</button>
+  <button class="theme-button" type="button" data-theme-toggle aria-label="Switch to white background">White</button>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-tag">Luxury Personal Shopping</div>
+      <h1 class="hero-title">Luxury Fashion<br><em>Without Borders</em></h1>
+      <p class="hero-sub">Exclusive designer sourcing and personal shopping from around the world. Люкс со всего мира.</p>
+      <div class="hero-btns">
+        <a href="#collections" class="btn-primary">Explore Collection</a>
+        <a href="#contact" class="btn-ghost">Contact Personal Shopper</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="card-glow"></div>
+      <div class="floating-card card-1">
+        <a class="media-link" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=1" target="_blank" rel="noopener" aria-label="View Instagram product image 1">
+          <img src="assets/instagram/dyuam-01.jpg" alt="Flagship Boutique luxury fashion product" loading="lazy">
+        </a>
+      </div>
+      <div class="floating-card card-2">
+        <a class="media-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=1" target="_blank" rel="noopener" aria-label="View Instagram product image 2">
+          <img src="assets/instagram/dyh-01.jpg" alt="Flagship Boutique curated designer product" loading="lazy">
+        </a>
+      </div>
+      <div class="floating-card card-3">
+        <a class="media-link" href="https://www.instagram.com/p/DUK8g6_jb3Q/" target="_blank" rel="noopener" aria-label="View featured Instagram image">
+          <img src="assets/instagram/duk-01.jpg" alt="Flagship Boutique featured Instagram selection" loading="lazy">
+        </a>
+      </div>
+      <div class="floating-card card-4">
+        <a class="media-link" href="https://www.instagram.com/p/DYrW2G4NN0r/" target="_blank" rel="noopener" aria-label="View Instagram campaign video">
+          <img src="assets/instagram/dyrw-ad.jpg" alt="Flagship Boutique campaign video preview" loading="lazy">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item">Designer Collections <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Global Luxury Sourcing <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Personal Shopping <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Exclusive Prices <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Люкс со всего мира <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Authentic Luxury <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Designer Collections <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Global Luxury Sourcing <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Personal Shopping <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Exclusive Prices <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Люкс со всего мира <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Authentic Luxury <span class="marquee-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- SCROLL GALLERY -->
+<section class="scroll-section" style="padding-top:5rem">
+  <div class="section-header reveal">
+    <span class="section-tag">Curated Gallery</span>
+    <h2 class="section-title">Editorial <em>Selections</em></h2>
+  </div>
+
+  <!-- Row 1: scrolls left -->
+  <div class="scroll-track-wrap">
+    <div class="scroll-track">
+      <a class="scroll-link" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=1" target="_blank" rel="noopener"><img class="scroll-img" src="assets/instagram/dyuam-01.jpg" alt="Instagram product selection 1" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=2" target="_blank" rel="noopener"><img class="scroll-img scroll-img-sm" src="assets/instagram/dyuam-02.jpg" alt="Instagram product selection 2" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=3" target="_blank" rel="noopener"><img class="scroll-img scroll-img-wide" src="assets/instagram/dyuam-03.jpg" alt="Instagram product selection 3" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYrW2G4NN0r/" target="_blank" rel="noopener"><img class="scroll-img" src="assets/instagram/dyrw-ad.jpg" alt="Instagram campaign video preview" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DUK8g6_jb3Q/" target="_blank" rel="noopener"><img class="scroll-img scroll-img-sm" src="assets/instagram/duk-01.jpg" alt="Featured Instagram product selection" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=1" target="_blank" rel="noopener"><img class="scroll-img scroll-img-wide" src="assets/instagram/dyh-01.jpg" alt="Instagram carousel product selection 1" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=1" target="_blank" rel="noopener"><img class="scroll-img" src="assets/instagram/dyuam-01.jpg" alt="Instagram product selection 1" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=2" target="_blank" rel="noopener"><img class="scroll-img scroll-img-sm" src="assets/instagram/dyuam-02.jpg" alt="Instagram product selection 2" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=3" target="_blank" rel="noopener"><img class="scroll-img scroll-img-wide" src="assets/instagram/dyuam-03.jpg" alt="Instagram product selection 3" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYrW2G4NN0r/" target="_blank" rel="noopener"><img class="scroll-img" src="assets/instagram/dyrw-ad.jpg" alt="Instagram campaign video preview" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DUK8g6_jb3Q/" target="_blank" rel="noopener"><img class="scroll-img scroll-img-sm" src="assets/instagram/duk-01.jpg" alt="Featured Instagram product selection" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=1" target="_blank" rel="noopener"><img class="scroll-img scroll-img-wide" src="assets/instagram/dyh-01.jpg" alt="Instagram carousel product selection 1" loading="lazy"></a>
+    </div>
+  </div>
+
+  <!-- Row 2: scrolls right -->
+  <div class="scroll-track-wrap">
+    <div class="scroll-track reverse">
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=2" target="_blank" rel="noopener"><img class="scroll-img scroll-img-sm" src="assets/instagram/dyh-02.jpg" alt="Instagram carousel product selection 2" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=3" target="_blank" rel="noopener"><img class="scroll-img scroll-img-wide" src="assets/instagram/dyh-03.jpg" alt="Instagram carousel product selection 3" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=4" target="_blank" rel="noopener"><img class="scroll-img" src="assets/instagram/dyh-04.jpg" alt="Instagram carousel product selection 4" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=5" target="_blank" rel="noopener"><img class="scroll-img scroll-img-sm" src="assets/instagram/dyh-05.jpg" alt="Instagram carousel product selection 5" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=6" target="_blank" rel="noopener"><img class="scroll-img scroll-img-wide" src="assets/instagram/dyh-06.jpg" alt="Instagram carousel product selection 6" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=7" target="_blank" rel="noopener"><img class="scroll-img" src="assets/instagram/dyh-07.jpg" alt="Instagram carousel product selection 7" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=2" target="_blank" rel="noopener"><img class="scroll-img scroll-img-sm" src="assets/instagram/dyh-02.jpg" alt="Instagram carousel product selection 2" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=3" target="_blank" rel="noopener"><img class="scroll-img scroll-img-wide" src="assets/instagram/dyh-03.jpg" alt="Instagram carousel product selection 3" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=4" target="_blank" rel="noopener"><img class="scroll-img" src="assets/instagram/dyh-04.jpg" alt="Instagram carousel product selection 4" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=5" target="_blank" rel="noopener"><img class="scroll-img scroll-img-sm" src="assets/instagram/dyh-05.jpg" alt="Instagram carousel product selection 5" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=6" target="_blank" rel="noopener"><img class="scroll-img scroll-img-wide" src="assets/instagram/dyh-06.jpg" alt="Instagram carousel product selection 6" loading="lazy"></a>
+      <a class="scroll-link" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=7" target="_blank" rel="noopener"><img class="scroll-img" src="assets/instagram/dyh-07.jpg" alt="Instagram carousel product selection 7" loading="lazy"></a>
+    </div>
+  </div>
+</section>
+
+<!-- COLLECTIONS -->
+<section id="collections">
+  <div class="section-header reveal">
+    <span class="section-tag">Our Specialties</span>
+    <h2 class="section-title" data-i18n-en="Exclusive <em>Collections</em>" data-i18n-fr="Collections <em>exclusives</em>">Exclusive <em>Collections</em></h2>
+    <p class="section-sub">From iconic designer bags to rare timepieces — sourced exclusively for you from across the globe.</p>
+  </div>
+  <div class="collections-grid reveal">
+    <a class="collection-item large" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=1" target="_blank" rel="noopener" aria-label="View Designer Bags on Instagram">
+      <img src="assets/instagram/dyuam-01.jpg" alt="Designer Bags" loading="lazy">
+      <div class="collection-overlay">
+        <div class="collection-label">Category 01</div>
+        <div class="collection-name">Designer Bags</div>
+        <div class="collection-arrow"></div>
+      </div>
+    </a>
+    <a class="collection-item" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=2" target="_blank" rel="noopener" aria-label="View Luxury Shoes on Instagram">
+      <img src="assets/instagram/dyuam-02.jpg" alt="Luxury Shoes" loading="lazy">
+      <div class="collection-overlay">
+        <div class="collection-label">Category 02</div>
+        <div class="collection-name">Luxury Shoes</div>
+        <div class="collection-arrow"></div>
+      </div>
+    </a>
+    <a class="collection-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=3" target="_blank" rel="noopener" aria-label="View Watches on Instagram">
+      <img src="assets/instagram/dyh-03.jpg" alt="Watches" loading="lazy">
+      <div class="collection-overlay">
+        <div class="collection-label">Category 03</div>
+        <div class="collection-name">Watches</div>
+        <div class="collection-arrow"></div>
+      </div>
+    </a>
+    <a class="collection-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=7" target="_blank" rel="noopener" aria-label="View Jewelry on Instagram">
+      <img src="assets/instagram/dyh-07.jpg" alt="Jewelry" loading="lazy">
+      <div class="collection-overlay">
+        <div class="collection-label">Category 04</div>
+        <div class="collection-name">Jewelry</div>
+        <div class="collection-arrow"></div>
+      </div>
+    </a>
+    <a class="collection-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=10" target="_blank" rel="noopener" aria-label="View Exclusive Clothing on Instagram">
+      <img src="assets/instagram/dyh-10.jpg" alt="Exclusive Clothing" loading="lazy">
+      <div class="collection-overlay">
+        <div class="collection-label">Category 05</div>
+        <div class="collection-name">Exclusive Clothing</div>
+        <div class="collection-arrow"></div>
+      </div>
+    </a>
+    <div class="collection-item" style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(201,168,76,0.02));display:flex;align-items:center;justify-content:center;border:1px solid var(--border)">
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Category 06</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--cream);margin-bottom:1.5rem">Personal<br>Shopping</div>
+        <a href="#contact" class="btn-primary" style="display:inline-block">Book Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAMPAIGN -->
+<section id="campaign">
+  <div class="campaign-grid">
+    <div class="campaign-copy reveal-left">
+      <span class="section-tag">Latest Campaign</span>
+      <h2 class="section-title">New Arrivals in <em>Motion</em></h2>
+      <p class="section-sub">A polished preview of the newest Flagship Boutique arrivals, curated for clients who want standout pieces sourced with speed and discretion.</p>
+      <div class="campaign-actions">
+        <a href="https://www.instagram.com/p/DYrW2G4NN0r/" class="btn-primary" target="_blank" rel="noopener">Watch on Instagram</a>
+        <a href="#contact" class="btn-ghost">Request Sourcing</a>
+      </div>
+    </div>
+    <div class="campaign-embed reveal-right" aria-label="Flagship Boutique Instagram campaign video">
+      <iframe src="https://www.instagram.com/p/DYrW2G4NN0r/embed" title="Flagship Boutique Instagram campaign video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; clipboard-write" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-bg"></div>
+  <div class="about-grid">
+    <div class="about-images reveal-left">
+      <a href="https://www.instagram.com/p/DUK8g6_jb3Q/" target="_blank" rel="noopener" aria-label="View featured Flagship Boutique Instagram post">
+        <img class="about-img-main" src="assets/instagram/duk-01.jpg" alt="Flagship Boutique featured selection" loading="lazy">
+      </a>
+      <a href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=8" target="_blank" rel="noopener" aria-label="View luxury fashion Instagram post">
+        <img class="about-img-accent" src="assets/instagram/dyh-08.jpg" alt="Luxury fashion product selection" loading="lazy">
+      </a>
+      <div class="about-img-float">
+        <div class="about-float-num">500+</div>
+        <div class="about-float-label">Brands Sourced</div>
+      </div>
+    </div>
+    <div class="about-text-block reveal-right">
+      <span class="section-tag">About Flagship</span>
+      <h2 class="section-title">Fashion is a<br><em>Global Language</em></h2>
+      <p class="about-description">Flagship Boutique specializes in luxury fashion sourcing and personal shopping for clients worldwide. We connect exclusive designer fashion with clients looking for elegance, authenticity, and premium style.</p>
+      <p class="about-sub">"We bring the world's most exclusive pieces directly to your doorstep."</p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">50+</div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div>
+          <div class="stat-num">200+</div>
+          <div class="stat-label">Designers</div>
+        </div>
+        <div>
+          <div class="stat-num">10k+</div>
+          <div class="stat-label">Happy Clients</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOLD DIVIDER -->
+<div class="gold-divider"><span class="gold-divider-icon">✦ FLAGSHIP BOUTIQUE ✦</span></div>
+
+<!-- INSTAGRAM -->
+<section id="instagram">
+  <div class="section-header reveal">
+    <span class="section-tag">@flagship_boutique</span>
+    <h2 class="section-title">Instagram <em>Showcase</em></h2>
+    <p class="section-sub">Follow our curated feed for the latest arrivals, styling inspiration, and exclusive behind-the-scenes.</p>
+  </div>
+  <div class="insta-grid reveal">
+    <a class="insta-item" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=1" target="_blank" rel="noopener" aria-label="Open Instagram image 1">
+      <img src="assets/instagram/dyuam-01.jpg" alt="Instagram product image 1" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=2" target="_blank" rel="noopener" aria-label="Open Instagram image 2">
+      <img src="assets/instagram/dyuam-02.jpg" alt="Instagram product image 2" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYuamnvDZ4X/?img_index=3" target="_blank" rel="noopener" aria-label="Open Instagram image 3">
+      <img src="assets/instagram/dyuam-03.jpg" alt="Instagram product image 3" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYrW2G4NN0r/" target="_blank" rel="noopener" aria-label="Open Instagram campaign video">
+      <img src="assets/instagram/dyrw-ad.jpg" alt="Instagram campaign video preview" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">▶</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=1" target="_blank" rel="noopener" aria-label="Open Instagram image 4">
+      <img src="assets/instagram/dyh-01.jpg" alt="Instagram carousel image 1" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=2" target="_blank" rel="noopener" aria-label="Open Instagram image 5">
+      <img src="assets/instagram/dyh-02.jpg" alt="Instagram carousel image 2" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=3" target="_blank" rel="noopener" aria-label="Open Instagram image 6">
+      <img src="assets/instagram/dyh-03.jpg" alt="Instagram carousel image 3" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=4" target="_blank" rel="noopener" aria-label="Open Instagram image 7">
+      <img src="assets/instagram/dyh-04.jpg" alt="Instagram carousel image 4" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=5" target="_blank" rel="noopener" aria-label="Open Instagram image 8">
+      <img src="assets/instagram/dyh-05.jpg" alt="Instagram carousel image 5" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=6" target="_blank" rel="noopener" aria-label="Open Instagram image 9">
+      <img src="assets/instagram/dyh-06.jpg" alt="Instagram carousel image 6" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=7" target="_blank" rel="noopener" aria-label="Open Instagram image 10">
+      <img src="assets/instagram/dyh-07.jpg" alt="Instagram carousel image 7" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=8" target="_blank" rel="noopener" aria-label="Open Instagram image 11">
+      <img src="assets/instagram/dyh-08.jpg" alt="Instagram carousel image 8" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=9" target="_blank" rel="noopener" aria-label="Open Instagram image 12">
+      <img src="assets/instagram/dyh-09.jpg" alt="Instagram carousel image 9" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DYhNiknjb7D/?img_index=10" target="_blank" rel="noopener" aria-label="Open Instagram image 13">
+      <img src="assets/instagram/dyh-10.jpg" alt="Instagram carousel image 10" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+    <a class="insta-item" href="https://www.instagram.com/p/DUK8g6_jb3Q/" target="_blank" rel="noopener" aria-label="Open featured Instagram post">
+      <img src="assets/instagram/duk-01.jpg" alt="Featured Instagram post image" loading="lazy">
+      <div class="insta-overlay"><div class="insta-icon">♡</div></div>
+    </a>
+  </div>
+  <div class="insta-cta reveal">
+    <a href="https://www.instagram.com/flagship_boutique" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Follow on Instagram
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-info reveal-left">
+      <span class="section-tag">Get in Touch</span>
+      <h2 class="section-title">Your Personal<br><em>Shopper Awaits</em></h2>
+      <p class="contact-description">Connect with us to access exclusive collections, receive personal styling advice, and source the most sought-after luxury pieces from around the world.</p>
+      <div class="contact-channels">
+        <a href="https://wa.me/393296630234" target="_blank" class="channel-btn channel-wa">
+          <div class="channel-icon" style="background:rgba(37,211,102,0.1)">
+            <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </div>
+          <div>
+            <span class="channel-label">WhatsApp</span>
+            <strong class="channel-value">+39 329 663 0234</strong>
+          </div>
+        </a>
+        <a href="https://t.me/Flagshipboutique" target="_blank" class="channel-btn channel-tg">
+          <div class="channel-icon" style="background:rgba(0,136,204,0.1)">
+            <svg viewBox="0 0 24 24" fill="#0088cc"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </div>
+          <div>
+            <span class="channel-label">Telegram</span>
+            <strong class="channel-value">@Flagshipboutique</strong>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/flagship_boutique" target="_blank" class="channel-btn channel-ig">
+          <div class="channel-icon" style="background:rgba(201,168,76,0.1)">
+            <svg viewBox="0 0 24 24" fill="var(--gold-dark)"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+          <div>
+            <span class="channel-label">Instagram</span>
+            <strong class="channel-value">@flagship_boutique</strong>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="contact-form-card reveal-right">
+      <h3 class="form-title">Request a Consultation</h3>
+      <p class="form-sub">Our personal shoppers respond within 24 hours</p>
+      <div id="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Alexandra">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Ivanova">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="hello@example.com">
+        </div>
+        <div class="form-group">
+          <label>Service</label>
+          <select>
+            <option value="">Select a service</option>
+            <option>Personal Shopping</option>
+            <option>Designer Bag Sourcing</option>
+            <option>Luxury Watches</option>
+            <option>Jewelry & Accessories</option>
+            <option>Full Wardrobe Curation</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Tell us about your style preferences, budget, or specific items you're looking for..."></textarea>
+        </div>
+        <button class="btn-submit" id="submit-btn">Send Inquiry</button>
+      </div>
+      <div class="form-success" id="form-success">
+        Thank you — we'll be in touch shortly.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">FLAGSHIP BOUTIQUE</div>
+      <p class="footer-tagline">Luxury items global sourcing.<br>Люкс со всего мира.<br>Exclusive prices, authentic pieces.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/flagship_boutique" target="_blank" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://t.me/Flagshipboutique" target="_blank" class="social-btn" aria-label="Telegram">
+          <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </a>
+        <a href="https://wa.me/393296630234" target="_blank" class="social-btn" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="#collections">Designer Bags</a></li>
+        <li><a href="#collections">Luxury Shoes</a></li>
+        <li><a href="#collections">Watches</a></li>
+        <li><a href="#collections">Jewelry</a></li>
+        <li><a href="#collections">Clothing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#contact">Personal Shopping</a></li>
+        <li><a href="#contact">Luxury Sourcing</a></li>
+        <li><a href="#contact">Style Consultation</a></li>
+        <li><a href="#contact">Gift Curation</a></li>
+        <li><a href="#contact">VIP Access</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Stay in the Loop</h5>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">New arrivals and exclusive access — delivered to you first.</p>
+      <div class="footer-newsletter">
+        <div class="newsletter-input-wrap">
+          <input type="email" placeholder="Your email" id="newsletter-email">
+          <button class="newsletter-submit" onclick="subscribeNewsletter()">Join</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Flagship Boutique. All rights reserved.</span>
+    <span class="footer-credit">Luxury Fashion Without Borders</span>
+  </div>
+</footer>
+
+<!-- FLOATING WA BUTTON -->
+<a href="https://wa.me/393296630234" id="float-wa" target="_blank" rel="noopener" aria-label="Contact on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+// ── LOADER
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const loader=document.getElementById('loader');
+    loader.style.opacity='0';
+    loader.style.transition='opacity .8s ease';
+    setTimeout(()=>{loader.style.display='none'},900);
+  },2200);
+});
+
+// ── CUSTOM CURSOR
+const cursor=document.getElementById('cursor');
+const ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cursor.style.left=mx+'px';cursor.style.top=my+'px';
+});
+function animateRing(){
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+// ── SCROLL PROGRESS
+window.addEventListener('scroll',()=>{
+  const pct=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
+  document.getElementById('scroll-progress').style.width=pct+'%';
+  const nav=document.getElementById('navbar');
+  nav.classList.toggle('scrolled',window.scrollY>60);
+});
+
+// ── PARTICLES
+const pContainer=document.getElementById('particles');
+for(let i=0;i<30;i++){
+  const p=document.createElement('div');
+  p.className='particle';
+  p.style.cssText=`left:${Math.random()*100}%;width:${Math.random()*2+1}px;height:${Math.random()*2+1}px;animation-duration:${Math.random()*10+8}s;animation-delay:${Math.random()*8}s;opacity:${Math.random()*.5+.2}`;
+  pContainer.appendChild(p);
+}
+
+// ── REVEAL ON SCROLL
+const revealEls=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}
+  });
+},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+revealEls.forEach(el=>observer.observe(el));
+
+// ── HAMBURGER
+const hamburger=document.getElementById('hamburger');
+const mobileMenu=document.getElementById('mobile-menu');
+hamburger.addEventListener('click',()=>{
+  mobileMenu.classList.toggle('open');
+  const spans=hamburger.querySelectorAll('span');
+  if(mobileMenu.classList.contains('open')){
+    spans[0].style.transform='rotate(45deg) translate(4px,4px)';
+    spans[1].style.opacity='0';
+    spans[2].style.transform='rotate(-45deg) translate(4px,-4px)';
+  } else {
+    spans[0].style.transform='';spans[1].style.opacity='';spans[2].style.transform='';
+  }
+});
+document.querySelectorAll('.menu-link').forEach(link=>{
+  link.addEventListener('click',()=>{
+    mobileMenu.classList.remove('open');
+    const spans=hamburger.querySelectorAll('span');
+    spans[0].style.transform='';spans[1].style.opacity='';spans[2].style.transform='';
+  });
+});
+
+// ── THEME TOGGLE
+document.querySelectorAll('.theme-dot').forEach(dot=>{
+  dot.addEventListener('click',()=>{
+    document.querySelectorAll('.theme-dot').forEach(d=>d.classList.remove('active'));
+    dot.classList.add('active');
+    if(dot.dataset.mode==='light'){document.body.classList.add('light-mode');}
+    else{document.body.classList.remove('light-mode');}
+  });
+});
+
+// ── FORM SUBMIT
+document.getElementById('submit-btn').addEventListener('click',function(){
+  const form=document.getElementById('contact-form');
+  const inputs=form.querySelectorAll('input,textarea,select');
+  const translateText=text=>window.FlagshipI18n?window.FlagshipI18n.translate(text):text;
+  let valid=true;
+  inputs.forEach(i=>{if(!i.value.trim())valid=false;});
+  if(!valid){this.style.background='#8a6b2a';this.textContent=translateText('Please fill all fields');setTimeout(()=>{this.style.background='';this.textContent=translateText('Send Inquiry');},2000);return;}
+  form.style.display='none';
+  document.getElementById('form-success').style.display='block';
+});
+
+// ── NEWSLETTER
+function subscribeNewsletter(){
+  const email=document.getElementById('newsletter-email');
+  if(email.value.includes('@')){
+    email.value=window.FlagshipI18n?window.FlagshipI18n.translate('Thank you!'):'Thank you!';
+    email.style.color='var(--gold)';
+    setTimeout(()=>{email.value='';email.style.color='';},2500);
+  }
+}
+
+// ── TOUCH SWIPE FOR SCROLL TRACKS
+document.querySelectorAll('.scroll-track-wrap').forEach(wrap=>{
+  let startX=0,scrollLeft=0;
+  const track=wrap.querySelector('.scroll-track');
+  wrap.addEventListener('touchstart',e=>{startX=e.touches[0].pageX;},{ passive:true});
+  wrap.addEventListener('touchmove',e=>{
+    const dx=e.touches[0].pageX-startX;
+    // pause and nudge
+    track.style.animationPlayState='paused';
+  },{ passive:true});
+  wrap.addEventListener('touchend',()=>{
+    track.style.animationPlayState='running';
+  });
+});
+
+// ── PARALLAX HERO
+window.addEventListener('scroll',()=>{
+  const hero=document.getElementById('hero');
+  const offset=window.scrollY;
+  if(hero){hero.style.backgroundPositionY=`${offset*.4}px`;}
+  document.querySelectorAll('.floating-card').forEach((card,i)=>{
+    const speed=[.05,.08,.06,.09][i]||.06;
+    card.style.transform=card.style.transform.replace(/translateY\([^)]*\)/,'')+ ` translateY(${offset*speed}px)`;
+  });
+});
+
+// ── NAV ACTIVE ON SCROLL
+const sections=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  const scroll=window.scrollY+100;
+  sections.forEach(s=>{
+    const top=s.offsetTop;
+    const h=s.offsetHeight;
+    const link=document.querySelector(`.nav-links a[href="#${s.id}"]`);
+    if(link){
+      if(scroll>=top&&scroll<top+h){link.style.color='var(--gold)';}
+      else{link.style.color='';}
+    }
+  });
+},{passive:true});
+</script>
+<script src="assets/js/language.js"></script>
+<script src="assets/js/theme.js"></script>
+<script src="assets/js/amelie.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+.amelie-toggle{position:fixed;right:2rem;bottom:calc(2rem + 66px);z-index:991;width:54px;height:54px;border-radius:50%;border:1px solid rgba(201,168,76,.65);background:linear-gradient(145deg,#1a1a1a,#3a2b10);color:var(--gold-light,#e8d5a3);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;text-decoration:none;box-shadow:0 4px 20px rgba(201,168,76,.28);cursor:pointer;transition:transform .3s,box-shadow .3s,border-color .3s}
+.amelie-toggle:hover{transform:scale(1.08);box-shadow:0 6px 30px rgba(201,168,76,.42);border-color:var(--gold,#c9a84c)}
+.amelie-toggle::after{content:'Amélie';position:absolute;right:64px;top:50%;transform:translateY(-50%);background:rgba(10,10,10,.9);border:1px solid rgba(201,168,76,.28);color:var(--cream,#faf8f4);font-family:'Jost',sans-serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;padding:.45rem .65rem;opacity:0;pointer-events:none;transition:opacity .25s;white-space:nowrap}
+.amelie-toggle:hover::after{opacity:1}
+body.light-mode .amelie-toggle{background:#fff;color:#8a6b2a}
+body.light-mode .amelie-toggle::after{background:#fff;color:#1a1a1a}
+.amelie-panel{position:fixed;right:2rem;bottom:calc(2rem + 132px);z-index:992;width:min(380px,calc(100vw - 2rem));max-height:min(640px,calc(100vh - 9rem));display:none;flex-direction:column;background:rgba(12,12,12,.96);border:1px solid rgba(201,168,76,.28);box-shadow:0 20px 70px rgba(0,0,0,.45);backdrop-filter:blur(18px);overflow:hidden}
+.amelie-panel.open{display:flex}
+body.light-mode .amelie-panel{background:rgba(255,255,255,.97);box-shadow:0 20px 70px rgba(0,0,0,.18)}
+.amelie-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.1rem;border-bottom:1px solid rgba(201,168,76,.2)}
+.amelie-name{font-family:'Cormorant Garamond',serif;font-size:1.35rem;letter-spacing:.08em;color:var(--cream,#faf8f4)}
+body.light-mode .amelie-name{color:#1a1a1a}
+.amelie-role{display:block;font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold,#c9a84c);margin-top:.2rem}
+.amelie-close{background:transparent;border:1px solid rgba(201,168,76,.24);color:var(--cream,#faf8f4);width:32px;height:32px;cursor:pointer;font-size:1rem}
+body.light-mode .amelie-close{color:#1a1a1a}
+.amelie-messages{padding:1rem;overflow:auto;display:flex;flex-direction:column;gap:.8rem;min-height:260px}
+.amelie-msg{max-width:86%;padding:.85rem .95rem;line-height:1.55;font-size:.86rem;color:var(--cream,#faf8f4);background:rgba(255,255,255,.06);border:1px solid rgba(201,168,76,.12)}
+.amelie-msg.user{align-self:flex-end;background:rgba(201,168,76,.18);border-color:rgba(201,168,76,.3)}
+.amelie-msg.bot{align-self:flex-start}
+body.light-mode .amelie-msg{color:#1a1a1a;background:rgba(0,0,0,.04)}
+body.light-mode .amelie-msg.user{background:rgba(201,168,76,.2)}
+.amelie-chips{display:flex;flex-wrap:wrap;gap:.5rem;padding:0 1rem 1rem}
+.amelie-chip{border:1px solid rgba(201,168,76,.24);background:transparent;color:var(--cream,#faf8f4);font-family:'Jost',sans-serif;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;padding:.55rem .65rem;cursor:pointer}
+body.light-mode .amelie-chip{color:#1a1a1a}
+.amelie-form{display:flex;gap:.5rem;padding:1rem;border-top:1px solid rgba(201,168,76,.2)}
+.amelie-input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.16);color:var(--cream,#faf8f4);font-family:'Jost',sans-serif;font-size:.86rem;padding:.8rem .9rem;outline:none}
+body.light-mode .amelie-input{background:#fff;color:#1a1a1a}
+.amelie-send{background:var(--gold,#c9a84c);border:0;color:#111;font-family:'Jost',sans-serif;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;padding:0 .9rem;cursor:pointer}
+@media(max-width:480px){
+  .amelie-toggle{right:1rem;bottom:calc(1.5rem + 58px);width:46px;height:46px;font-size:1.05rem}
+  .amelie-toggle::after{display:none}
+  .amelie-panel{left:1rem;right:1rem;bottom:calc(1.5rem + 112px);width:auto;max-height:calc(100vh - 8rem)}
+}
