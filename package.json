@@ -1,0 +1,13 @@
+{
+  "name": "flagship-boutique",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Flagship Boutique static website with Vercel serverless AI concierge.",
+  "scripts": {
+    "dev": "vercel dev",
+    "check": "node --check api/amelie.js && node --check api/health.js && node --check assets/js/amelie.js && node --check assets/js/language.js && node --check assets/js/theme.js && node --check assets/js/site-pages.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

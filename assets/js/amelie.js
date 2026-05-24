@@ -1,5 +1,5 @@
 (function(){
-  const endpoint=window.AMELIE_API_ENDPOINT||'';
+  const endpoint=window.AMELIE_API_ENDPOINT||'/api/amelie';
   const knowledge={
     brand:'Flagship Boutique',
     assistant:'Amélie',
@@ -13,7 +13,7 @@
       instagramUrl:'https://www.instagram.com/flagship_boutique'
     },
     pages:[
-      {name:'Home',url:'flagship-boutique.html'},
+      {name:'Home',url:'index.html'},
       {name:'Collections',url:'collections.html'},
       {name:'Services',url:'services.html'},
       {name:'Guide',url:'guide.html'}
@@ -84,7 +84,7 @@
         const response=await fetch(endpoint,{
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({message,language:lang(),context:knowledge})
+          body:JSON.stringify({message,language:lang()})
         });
         if(response.ok){
           const data=await response.json();
